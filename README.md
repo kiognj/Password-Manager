@@ -33,6 +33,7 @@ This is the primitive user-friendly password manager application that is designe
 1) Clone the repository:
 
     `git clone https://github.com/kiognj/Password-Manager`
+    
     `cd Password-Manager`
 
 2) Install dependencies: Ensure you have installed python 3.6 +, then run
