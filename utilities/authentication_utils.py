@@ -8,15 +8,15 @@ def signup():
     """User sign-up process"""
     try:
         # Capturing and validation of username
-        username = validate_username(input("\nEnter your desired username: "))
+        username = validate_username(input("\nEnter your desired username: ").strip())
         # Check if username is already in use
         if check_user_exists(username):
             print("Username already taken. Please choose a different one.")
             logger.warning(f"Failed attempt to create a user: Username {username} already taken.")
             return
         # Capturing and validation of master password
-        master_password = validate_password(getpass.getpass("Enter your master password: "))
-        confirm_password = getpass.getpass("Confirm your master password: ")
+        master_password = validate_password(getpass.getpass("Enter your master password: ").strip())
+        confirm_password = getpass.getpass("Confirm your master password: ").strip()
         # Check if master password inputs are matching
         if master_password != confirm_password:
             print("Password do not match.")
@@ -37,8 +37,8 @@ def login():
     """User login process"""
     try:
         # Capture user credentials to log in to the password manager
-        username = input("Enter your username: ")
-        master_password = getpass.getpass("Enter your master password: ")
+        username = input("Enter your username: ").strip()
+        master_password = getpass.getpass("Enter your master password: ").strip()
         # Get database stored hash of the master password of the exact user
         stored_hashed_password = get_user_password_hash(username)
         # Check if the master password is correct by comparing the hashes

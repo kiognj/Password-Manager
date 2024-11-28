@@ -28,7 +28,7 @@ def main():
         # Main Menu of the Password Manager
         print("\nWelcome to the Password Manager!")
         print("\n1. Sign Up\n2. Log in\n3. Exit\n")
-        choice = input("Choose an option: ")
+        choice = input("Choose an option: ").strip()
 
         # Sign Up process activated
         if choice == "1":
@@ -40,7 +40,7 @@ def main():
                 while True:
                     # Enter the User Menu
                     print("\n1. Add Credential\n2. Show List of all Credentials\n3. Retrieve Credential\n4. Update Credential\n5. Delete Credential\n6. Log Out\n")
-                    choice = input("Choose an option: ")
+                    choice = input("Choose an option: ").strip()
                     # Before proceeding to the Password Manager Tools check the vault timeout of inactivity
                     if not check_vault_timeout():
                         # If 'Log out' option selected proceed without re-entering the master-password
@@ -51,7 +51,7 @@ def main():
                         # Re-enter the master-password to stay logged in after some time of inactivity
                         else:
                             print("\nVault locked due to inactivity.")
-                            re_password = getpass.getpass("Re-enter your master password to unlock the vault: ")
+                            re_password = getpass.getpass("Re-enter your master password to unlock the vault: ").strip()
                             if master_password == re_password:
                                 # Stay logged in and reset the vault timer
                                 last_activity = time.time()
@@ -66,23 +66,23 @@ def main():
                     if choice == "1": 
                         try:
                             # Capturing and validation of service name
-                            service_name = validate_service_name(input("Enter service name: "))
+                            service_name = validate_service_name(input("Enter service name: ").strip())
                             # Check if service already exists
                             if check_service_exists(service_name, user_id):
                                 print(f"The service '{service_name}' already exists in your vault.")
                                 logger.warning(f"User '{username}' tried to add credentials of the exsisting service.")
                                 continue
                             # Capturing and validation of service username
-                            username = validate_service_username(input("Enter username: "))
+                            username = validate_service_username(input("Enter username: ").strip())
                             # Ask if needed to generate strong password
-                            generate = input("Do you want to generate a strong password? (yes/no): ").lower()
-                            if generate == "yes":
+                            generate = input("Do you want to generate a strong password? (yes/no): ").lower().strip()
+                            if generate in ["yes", "y"]:
                                 # Generate strong password
                                 password = generate_password()
                                 print(f"Generated password: {password}")
                             else:
                                 # Capturing and validation of password
-                                password = validate_password(getpass.getpass("Enter password: "))
+                                password = validate_password(getpass.getpass("Enter password: ").strip())
                             # Generate random salt, generate key out of salt and master-password, encrypt password with new-generated key
                             salt = get_random_bytes(16)
                             key = generate_key(master_password, salt)
@@ -116,7 +116,7 @@ def main():
                                 print("No credentials stored yet.")
                                 continue
                             # Capturing and validation of service name
-                            service_name = validate_service_name(input("Enter the service name: "))
+                            service_name = validate_service_name(input("Enter the service name: ").strip())
                             # Check if service exists
                             if service_name not in services:
                                 print("Invalid service name. Please try again.")
@@ -156,31 +156,31 @@ def main():
                                 print("No credentials stored yet.")
                                 continue
                             # Capturing and validation of service name
-                            service_name = validate_service_name(input("Enter the service name of the credential to update: "))
+                            service_name = validate_service_name(input("Enter the service name of the credential to update: ").strip())
                             # Check if service exists
                             if service_name not in services:
                                 logger.warning(f"User '{log_user}' tried to update credentials of the unexsisting service.")
                                 print("Invalid service name. Please try again.")
                                 continue
                             # Ask if needed to update username of service
-                            update_username = input("Do you want to update the username? (yes/no): ").lower()
+                            update_username = input("Do you want to update the username? (yes/no): ").lower().strip()
                             new_username = None
-                            if update_username == "yes":
+                            if update_username in ["yes", "y"]:
                                 # Capturing and validation of new username
-                                new_username = validate_service_username(input("Enter the new username: "))
+                                new_username = validate_service_username(input("Enter the new username: ").strip())
                             # Ask if needed to update password of service
-                            update_password = input("Do you want to update the password? (yes/no): ").lower()
+                            update_password = input("Do you want to update the password? (yes/no): ").lower().strip()
                             new_password = None
-                            if update_password == "yes":
+                            if update_password in ["yes", "y"]:
                                 # Ask if needed to generate the new password
-                                generate = input("Do you want to generate a strong password? (yes/no): ")
-                                if generate == "yes":
+                                generate = input("Do you want to generate a strong password? (yes/no): ").strip()
+                                if generate in ["yes", "y"]:
                                     # Generate the new password
                                     new_password = generate_password()
                                     print(f"Generated password: {new_password}")
                                 else:
                                     # Capturing and validation of new password
-                                    new_password = validate_password(getpass.getpass("Enter the new password: "))
+                                    new_password = validate_password(getpass.getpass("Enter the new password: ").strip())
                             # Update the username if it was needed to
                             if new_username is not None:
                                 # Update the database with a new username for the service
@@ -221,14 +221,14 @@ def main():
                                 print("No credentials stored yet.")
                                 continue
                             # Capturing and validation of service name
-                            service_name = validate_service_name(input("Enter the service name of the credential to delete: "))
+                            service_name = validate_service_name(input("Enter the service name of the credential to delete: ").strip())
                             # Check if service exists
                             if service_name not in services:
                                 print("Invalid service name. Please try again.")
                                 logger.warning(f"User '{log_user}' tried to delete credentials of the unexsisting service.")
                                 continue
                             # Confirm the deletion by typing in 'confirm' word
-                            confirm = input(f"Please type 'confirm' to confirm the deletion of the credential for '{service_name}': ")
+                            confirm = input(f"Please type 'confirm' to confirm the deletion of the credential for '{service_name}': ").strip()
                             if confirm == "confirm":
                                 # Delete the credential in the database
                                 if delete_credential(service_name, user_id):
