@@ -42,7 +42,7 @@ This is the primitive user-friendly password manager application that is designe
 
 3) Run the application
 
-    `python app.py`
+    `python app.py` or `py app.py`
 
 
 ## How to use
